@@ -98,8 +98,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const result = await response.json();
             if (result.disease) {
-                // window.location.href = `/${result.disease}.html`;
-                alert(`Predicted Disease: ${result.disease}`);
+                window.location.href = `/${result.disease}`;
+                // alert(`Predicted Disease: ${result.disease}`);
             } else {
                 alert('Error predicting disease. Please try again.');
             }

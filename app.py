@@ -7,10 +7,8 @@ import os
 
 app = Flask(__name__)
 
-# Load the model
 model = tf.keras.models.load_model("trained_plant_disease_model.keras")
 
-# Define class labels
 class_labels = [
     'Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot',
     'Corn_(maize)___Common_rust_',
@@ -33,12 +31,12 @@ class_labels = [
 
 def model_prediction(image_file):
     try:
-        # Open the image file using PIL
+        
         image = tf.keras.preprocessing.image.load_img(image_file,target_size=(128,128))
         input_arr = tf.keras.preprocessing.image.img_to_array(image)
-        input_arr = np.array([input_arr]) #convert single image to batch
+        input_arr = np.array([input_arr]) 
         predictions = model.predict(input_arr)
-        return np.argmax(predictions) #return index of max element
+        return np.argmax(predictions) 
     except Exception as e:
         print(f"Error processing image: {str(e)}")
         return None
@@ -55,20 +53,32 @@ def login():
 def signup():
     return render_template('sign.html')
 
+@app.route('/Tomato___Early_blight')
+def teblight():
+    return render_template('Tomato___Early_blight.html')
+
+@app.route('/Tomato___Late_blight')
+def tlblight():
+    return render_template('Tomato___Late_blight.html')
+
+@app.route('/Tomato___Bacterial_spot')
+def tbspot():
+    return render_template('Tomato___Bacterial_spot.html')
+
 @app.route('/predict', methods=['POST'])
 def predict():
     if 'image' not in request.files:
         return jsonify({'error': 'No image provided'}), 400
 
     try:
-        # Get the image file from the request
+        
         image_file = request.files['image']
 
         with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp_file:
             temp_file.write(image_file.read())
             temp_file_path = temp_file.name
 
-        # Get the prediction
+        
         result_index = model_prediction(temp_file_path)
 
         os.remove(temp_file_path)
@@ -76,10 +86,10 @@ def predict():
         if result_index is None:
             return jsonify({'error': 'Error processing the image'}), 500
 
-        # Get the predicted disease from the class labels
+        
         predicted_disease = class_labels[result_index]
 
-        # Return the prediction as a JSON response
+        
         return jsonify({
             'disease': predicted_disease
         })
