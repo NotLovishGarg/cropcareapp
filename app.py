@@ -97,5 +97,4 @@ def predict():
         print(f"Error during prediction: {str(e)}")
         return jsonify({'error': 'Error processing image'}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
