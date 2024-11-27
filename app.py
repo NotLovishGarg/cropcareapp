@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import tensorflow as tf
 import numpy as np
-from PIL import Image
 import tempfile
 import os
 
